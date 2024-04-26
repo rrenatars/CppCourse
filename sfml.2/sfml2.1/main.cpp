@@ -12,11 +12,16 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode({ WINDOW_WIDTH, WINDOW_HEIGHT }), "Wave Moving Ball");
     sf::Clock clock;
-
-    const sf::Vector2f position = { 10, 350 };
+    sf::Clock clock2;
 
     sf::CircleShape ball(BALL_SIZE);
     ball.setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
+    float speedX = 100.f;
+
+    const sf::Vector2f startPos = {10, 300};
+
+    ball.setPosition(startPos);
+    sf::Vector2f curPos = ball.getPosition();
 
     while (window.isOpen())
     {
@@ -29,17 +34,20 @@ int main()
             }
         }
 
-        constexpr float speedX = 100.f;
         constexpr float amplitudeY = 80.f;
         constexpr float periodY = 2;
 
         const float time = clock.getElapsedTime().asSeconds();
+        const float dTime = clock2.restart().asSeconds();
         const float wavePhase = time * float(2 * M_PI);
-        const float x = speedX * time;
-        const float y = amplitudeY * std::sin(wavePhase / periodY);
-        const sf::Vector2f offset = { x, y };
+        curPos.x += speedX * dTime;
+        curPos.y = 300 + amplitudeY * std::sin(wavePhase / periodY);
+
+        if (((curPos.x + 2 * BALL_SIZE >= WINDOW_WIDTH) && (speedX > 0)) || ((curPos.x <= 0) && (speedX < 0))) {
+            speedX = -speedX;
+        }
  
-        ball.setPosition(position + offset);
+        ball.setPosition(curPos);
 
         window.clear();
         window.draw(ball);

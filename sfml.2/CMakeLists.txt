@@ -7,4 +7,4 @@ project(sfml-lab-2)
 # Каждый подкаталог содержит CMakeLists.txt
 add_subdirectory(01)
 add_subdirectory(02)
-add_subdirectory(sfml2.1)
+add_subdirectory(03)
